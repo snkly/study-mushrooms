@@ -1,4 +1,4 @@
-import {iNat, handpickedMushroomIds, formatWikiRevision } from "../../utils/config";
+import { iNat, handpickedMushroomIds, formatWikiRevision } from "../../utils/config";
 import {
   FETCH_FUNGI_REQUEST,
   FETCH_FUNGI_SUCCESS,
@@ -116,7 +116,7 @@ export function fetchSpecie(id) {
             const result = observation.photos.map((photo) => {
               return (photo.original_dimensions.width/photo.original_dimensions.height > 1) ? true : false;
             })
-            return _.includes(result, false) ? false : true ;
+            return _.includes(result, false) ? false : true;
           }
         )};
 
@@ -204,11 +204,9 @@ export function fetchSpeciesDetails(name, ancestorIds) {
       // Check for wikipedia redirect -> Shaggy parasol
 
       dispatch(specieSuccess(_.merge(mycologicalData, mushroomDescription, mushroomDescriptionShort, taxonomyData)));
-  
+
     })).catch(error =>
       dispatch(specieFailure(error))
     );
   }
 }
-
-// http

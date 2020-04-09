@@ -59,22 +59,6 @@ const INITIAL_STATE = {
         },
         error: null,
         loading: false
-    },
-    specieEOLObject: {
-        specie: {
-            flavor_text_entries: [{}],
-            genera: [{}]
-        },
-        error: null,
-        loading: false
-    },
-    specieBoldObject: {
-        specie: {
-            flavor_text_entries: [{}],
-            genera: [{}]
-        },
-        error: null,
-        loading: false
     }
 };
 
@@ -112,8 +96,18 @@ export default function (state = INITIAL_STATE, action) {
                 ...state,
                fungiObject: {
                     fungi: {
+                        name: "",
                         names: [{}],
-                        default_photo: {square_url: ""}
+                        preferred_common_name: "",
+                        default_photo: {
+                            id: null,
+                            attribution: null,
+                            square_url: "",
+                            url: null,
+                            licenseCode: null
+                        },
+                        observationPhotos: [],
+                        observations_count: 0
                     },
                     error: null,
                     loading: true
@@ -133,10 +127,18 @@ export default function (state = INITIAL_STATE, action) {
                 ...state,
                 fungiObject: {
                     fungi: {
+                        name: "",
                         names: [{}],
+                        preferred_common_name: "",
                         default_photo: {
-                            square_url: ""
-                        }
+                            id: null,
+                            attribution: null,
+                            square_url: "",
+                            url: null,
+                            licenseCode: null
+                        },
+                        observationPhotos: [],
+                        observations_count: 0
                     },
                     error: action.payload,
                     loading: false

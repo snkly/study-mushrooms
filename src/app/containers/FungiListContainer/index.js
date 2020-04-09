@@ -22,8 +22,8 @@ class FungiList extends Component {
   render() {
     const { fungiList } = this.props;
     return (
-      <Fragment style={{ marginTop: '2em' }}>
-        <Segment>
+      <Fragment>
+        <Segment style={{ marginTop: '2em' }}>
           <Card.Group 
             itemsPerRow={5}
             centered

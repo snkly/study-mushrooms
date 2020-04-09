@@ -14,16 +14,15 @@ const ObservationPhotos = ({photoSets, observationsCount}) => {
   const iNatObservationsTotal = (
     observationsCount <= 500 ? <span>Uncommon mushroom</span>
         : observationsCount > 500 && observationsCount <= 1000 ? <span>Semi-common mushroom</span> 
-            : observationsCount > 1000 && observationsCount <= 1500 ? <span>Common mushroom: {observationNum}</span>
-                : observationsCount > 1500 && observationsCount < 2000 ? <span>Very common mushroom: {observationNum}</span>
+            : observationsCount > 1000 && observationsCount <= 1500 ? <span>Common mushroom</span>
+                : observationsCount > 1500 && observationsCount < 2000 ? <span>Very common mushroom</span>
                     : <span>Highly common mushroom</span>
     );
 
     const observationPhotos = photoSets ? (
       photoSets.map((photoSet, i) => {
-        const imgUrl = photoSet.photos.map((photo) => photo.url.replace("square", "large")); 
-        return <img src={imgUrl} alt="" key={i}/>
-      })
+        return photoSet.photos.map((photoObj) => photoObj)
+      }) 
     ) : null;
 
     return (
@@ -34,8 +33,13 @@ const ObservationPhotos = ({photoSets, observationsCount}) => {
             infiniteLoop
             autoPlay
             height="500px"
-          >
-            {observationPhotos}
+          > 
+          {
+            _(observationPhotos)
+              .flatten()
+              .map((image) => <img src={image.url.replace("square", "large")} attr={image.attribution} key={image.id}/>)
+              .value()
+          }
           </Carousel>
           <Segment>
             <Header 
