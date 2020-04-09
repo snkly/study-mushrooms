@@ -1,0 +1,14 @@
+.mushroomCard {
+    margin: 12px !important;
+    width: 190px !important;
+
+    .image img {
+        height: 200px !important;
+        object-fit: cover;
+    }
+
+    &:hover { 
+    -webkit-transform: translateY(-3px);
+    transform: translateY(-3px)
+    }
+}
