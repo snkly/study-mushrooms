@@ -62,7 +62,7 @@ const SearchBar = () => {
     e.preventDefault();
     resetInputField();
     // Send selected id back
-    return result ? window.location = `/fungi/${result.id}/` : null;
+    return result ? window.location = `/fungi/${result.id}` : null;
   };
 
   return(
