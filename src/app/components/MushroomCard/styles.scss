@@ -1,10 +1,14 @@
 .mushroomCard {
-    margin: 12px !important;
-    width: 190px !important;
+    margin: 12px auto !important;
 
-    .image img {
-        height: 200px !important;
-        object-fit: cover;
+    @media (min-width: 768px) {
+        //margin: 12px !important; 
+        //width: 190px !important;
+
+        .image img {
+            height: 200px !important;
+            object-fit: cover;
+        }    
     }
 
     &:hover { 

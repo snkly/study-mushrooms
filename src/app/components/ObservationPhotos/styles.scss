@@ -3,7 +3,14 @@
 }
 
 .observationCarousel {
-    .carousel-slider {
-        height: 500px;
+
+    @media (min-width: 992px) { 
+        .carousel-slider {
+            height: 525px;
+        }
+    }
+
+    .carousel .thumbs-wrapper {
+        margin: 0px!important;
     }
 }

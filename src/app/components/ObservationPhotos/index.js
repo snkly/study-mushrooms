@@ -32,7 +32,6 @@ const ObservationPhotos = ({photoSets, observationsCount}) => {
             className="observationCarousel"
             infiniteLoop
             autoPlay
-            height="500px"
           > 
           {
             _(observationPhotos)

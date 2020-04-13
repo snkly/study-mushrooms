@@ -9,14 +9,14 @@ import {
 
 const MushroomCard = ({mushroom}) => {
   return (
-    <Link to={`/fungi/${mushroom.id}`}>
       <Card
+        as={Link}
         image={mushroom.default_photo.square_url.replace("square", "large")}
         className="mushroomCard"
         header={mushroom.name}
         meta={mushroom.preferred_common_name ?  _.upperFirst(mushroom.preferred_common_name) : ""}
+        to={`/fungi/${mushroom.id}`}
       />
-    </Link>
   );
 };
 

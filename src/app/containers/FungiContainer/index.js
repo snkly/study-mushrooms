@@ -40,9 +40,9 @@ class Fungi extends Component {
     return (
       <Fragment>
         {!fungiObject.loading && !specieObject.loading ? (
-          <Grid style={{ marginTop: '1em' }}>
-            <Grid.Row columns={2}>
-              <Grid.Column width={6}>
+          <Grid stackable>
+            <Grid.Row computer={2}>
+              <Grid.Column computer={6}>
                 <SpeciesCard 
                   name={fungiObject.fungi.name}
                   commonName={fungiObject.fungi.preferred_common_name}
@@ -50,15 +50,15 @@ class Fungi extends Component {
                   description={specieObject.specie.descriptionShort}
                 />
               </Grid.Column>
-              <Grid.Column width={10}>
+              <Grid.Column computer={10}>
                 <ObservationPhotos
                   photoSets={fungiObject.fungi.observationPhotos}
                   observationsCount={fungiObject.fungi.observations_count}
                 />
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={2}>
-              <Grid.Column width={12}>
+            <Grid.Row computer={2}>
+              <Grid.Column  computer={12}>
                 <SpeciesInfo
                     description={specieObject.specie.description}
                     wikiUrl={fungiObject.fungi.wikipedia_url}
@@ -66,7 +66,7 @@ class Fungi extends Component {
                     synonymousTaxonIds={fungiObject.fungi.current_synonymous_taxon_ids}
                   />
               </Grid.Column>
-              <Grid.Column width={4}>
+              <Grid.Column computer={4}>
                 <MycoCharacteristics 
                   hymeniumType={specieObject.specie.hymeniumType}
                   hymenium={specieObject.specie.whichGills}

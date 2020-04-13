@@ -11,8 +11,8 @@ const HeaderBar = () => {
   return (
     <Fragment>
       <Segment>
-        <Grid>
-          <Grid.Column floated='left' width={10}>
+        <Grid stackable columns='equal'>
+          <Grid.Column floated='left' tablet={7} computer={9} largeScreen={11}>
             <Link to={`/`}>
               <Header
                 as='h1'
@@ -22,7 +22,7 @@ const HeaderBar = () => {
               />
             </Link>
           </Grid.Column>
-          <Grid.Column floated='right' width={6}>
+          <Grid.Column floated='right' tablet={9} computer={7} largeScreen={5}>
             <SearchBar />
           </Grid.Column>
         </Grid>

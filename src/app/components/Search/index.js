@@ -16,7 +16,7 @@ const SearchBar = () => {
       iNat.get('https://api.inaturalist.org/v1/taxa/autocomplete', {
         params: {
           q: searchValue,
-          all_names: true,
+          all_names: false,
           locale: 'en',
           taxon_id: [47169,55523,152031,152032, 53539],
           rank: 'species'
@@ -30,7 +30,10 @@ const SearchBar = () => {
           const allResults = response.data.results.map((matchedResult, i) => {
             let resultsObj = {
               title: _.upperFirst(matchedResult.matched_term),
-              description: _.upperFirst(matchedResult.preferred_common_name) + ', ' + _.upperFirst(matchedResult.name),
+              description: matchedResult.preferred_common_name !== matchedResult.matched_term ? 
+`${_.upperFirst(matchedResult.name)},
+${_.upperFirst(matchedResult.preferred_common_name)}` 
+                : _.upperFirst(matchedResult.name), 
               id: matchedResult.id,
               image: matchedResult.default_photo.square_url ? matchedResult.default_photo.square_url : null
             }

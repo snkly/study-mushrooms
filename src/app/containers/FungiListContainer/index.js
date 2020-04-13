@@ -23,10 +23,12 @@ class FungiList extends Component {
     const { fungiList } = this.props;
     return (
       <Fragment>
-        <Segment style={{ marginTop: '2em' }}>
+        <Segment>
           <Card.Group 
             itemsPerRow={5}
-            centered
+            style={{ margin: '.25em auto'}}
+            fluid
+            stackable
           >
           {!fungiList.loading 
             ? _.shuffle(fungiList.mushrooms).map(mushroom => <MushroomCard key={mushroom.id} mushroom={mushroom}/>)
