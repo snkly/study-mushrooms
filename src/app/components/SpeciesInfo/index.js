@@ -9,15 +9,14 @@ import {
   } from 'semantic-ui-react'
 
 const SpeciesInfo = ({description, observationsCount, synonymousTaxonIds, ancestory, wikiUrl }) => {
-    const splitDescription = _.split(description, '<h2>');
 
-    const getSectionPanes = splitDescription.map((descriptionText, i) => {
+    const getSectionPanes =  _.split(description, '<h2>').flatMap((descriptionText, i) => {
       // Get header from revision HTML string with regex, Content before '</span></h2>'
       let findHeaderText = descriptionText.match(/(?<=(">))(\w|\d|\n|[().,\-:;@#$%^&*[\]"'+–//®°⁰!?{}|`~]| )+?(?=(<\/span><\/h2>))/g);
       const header = !_.isNull(findHeaderText) ? findHeaderText.pop() : "Info";
       const content = descriptionText.split('</h2>');
-      
-      if (header === "See also" || header === "Footnotes" || header === "Resources" || header === "References" || header === "External links" || header === "Gallery" || header === "Further reading" || header === "Notes" ) return {}; 
+
+      if (header === "See also" || header === "Footnotes" || header === "Resources" || header === "References" || header === "External links" || header === "Gallery" || header === "Further reading" || header === "Notes" ) return []; 
       return { menuItem: header, render: () => <Tab.Pane dangerouslySetInnerHTML={{ __html: content[1] ? content[1] : content[0]}}/> } 
     });
     

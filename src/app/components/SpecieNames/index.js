@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import "./styles.scss";
@@ -9,12 +9,14 @@ import {
   } from 'semantic-ui-react'
 
 const SpecieNames = ({names}) => {
-  let getNameByType = (validity, locale) => {
+  const getNameByType = (validity, locale) => {
     return names ? (
-      names.map((name) => name.is_valid === validity &&  name.locale === locale ? _.upperFirst(name.name) : null )
+      names.flatMap((name) => name.is_valid === validity &&  name.locale === locale ? _.upperFirst(name.name) : [] )
     ) : null;
   }
-  
+
+  const oldTaxonNames = getNameByType(false, "sci"); 
+
   return (
     <Fragment>
       <Header as='h3' attached='top' content='Names' />
@@ -23,8 +25,13 @@ const SpecieNames = ({names}) => {
         <List items={getNameByType(true, "sci")} />
         <h5>Common Names</h5>
         <List items={getNameByType(true, "en")} />
-        <h5>Taxon names (old)</h5>
-        <List items={getNameByType(false, "sci")} />
+        { oldTaxonNames.length 
+          ? (<> 
+            <h5>Taxon names (old)</h5>
+            <List items={oldTaxonNames} /> 
+            </>)
+          : ""
+        }
       </Segment>
     </Fragment>
   );
