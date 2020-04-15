@@ -135,37 +135,39 @@ export function fetchSpeciesDetails(name, ancestorIds) {
       axios.get('https://en.wikipedia.org/w/api.php', {
         //https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=Amanita%20muscaria
         params: {
+          //titles: 'Agaricus subrutilescens'
+          titles: name,
           format: 'json',
           action: 'query',
           prop: 'extracts',
           //exintro: true,
           //explaintext: true,
           redirects: 1,
-          origin: '*',
-          //titles: 'Agaricus subrutilescens'
-          titles: name
+          origin: '*'
         }
       }),
       axios.get('https://en.wikipedia.org/w/api.php', {
         params: {
+          //titles: 'Agaricus subrutilescens'
+          titles: name,
           format: 'json',
           action: 'query',
           prop: 'revisions',
           rvprop: 'content',
           rvsection: 0,
           origin: '*',
-          //titles: 'Agaricus subrutilescens'
-          titles: name
+          redirects: 1
         }
       }),
       axios.get('https://en.wikipedia.org/w/api.php', {
         params: {
+          //titles: 'Agaricus subrutilescens'
+          titles: name,
           format: 'json',
           action: 'query',
           prop: 'description',
-          origin: '*',
-          //titles: 'Agaricus subrutilescens'
-          titles: name
+          redirects: 1,
+          origin: '*'
         }
       }),
       iNat.get('taxa', {
@@ -176,21 +178,16 @@ export function fetchSpeciesDetails(name, ancestorIds) {
             rank: ['phylum', 'subphylum', 'superclass', 'class', 'subclass', 'superorder', 'order', 'suborder', 'family', 'genus', 'genushybrid', 'species', 'hybrid', 'subspecies']
           }
         }),
-    ]).then(axios.spread((descriptionResults, revisionResults, shortDescriptionResults, taxaResults, s) => {
-
+    ]).then(axios.spread((descriptionResults, revisionResults, shortDescriptionResults, taxaResults) => {
       // Find current mushroom Wiki ID
-      let wikiId;
-      for (var key in descriptionResults.data.query.pages) { wikiId = key; }
+      const wikiId = parseInt(_.toPairs(descriptionResults.data.query.pages)[0][0]);
 
-      // Get specie description from Wikipedia 
+      // Get specie description from Wikipedia
       const mushroomDescription = {
         description: descriptionResults.data.query.pages[wikiId].extract
       }
-
       // Get specie mycological characteristics from Wikipedia revision data
-      const mycologicalData = _.isArray(revisionResults.data.query.redirects) 
-        ? revisionResults.query.pages[wikiId].title 
-        : formatWikiRevision(revisionResults.data.query.pages[wikiId].revisions[0]["*"]);
+      const mycologicalData = formatWikiRevision(revisionResults.data.query.pages[wikiId].revisions[0]["*"]);
 
       // Get specie description from Wikipedia 
       const mushroomDescriptionShort = {
@@ -201,10 +198,9 @@ export function fetchSpeciesDetails(name, ancestorIds) {
       const taxonomyData = {
         taxonomyData: taxaResults.data.results
       }
-      // Check for wikipedia redirect -> Shaggy parasol
 
       dispatch(specieSuccess(_.merge(mycologicalData, mushroomDescription, mushroomDescriptionShort, taxonomyData)));
-
+      
     })).catch(error =>
       dispatch(specieFailure(error))
     );
