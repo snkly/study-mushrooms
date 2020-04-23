@@ -2,11 +2,7 @@ import React, { Fragment } from 'react';
 //import PropTypes from 'prop-types';
 import _ from 'lodash';
 import "./styles.scss";
-import {
-  Header,
-  Item,
-  Segment
-} from 'semantic-ui-react'
+import { Header, Item, Segment } from 'semantic-ui-react'
 
 const MycoCharacteristics = ({ cap, cap2, hymeniumType, hymenium, hymenium2, stipe, stipe2, sporePrint, sporePrint2, ecologicalType, ecologicalType2, edibility, edibility2 }) => {
   // Cheap data check

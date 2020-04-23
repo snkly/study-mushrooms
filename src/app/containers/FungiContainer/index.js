@@ -6,32 +6,23 @@ import {withRouter} from "react-router-dom";
 import * as actions from '../../actions/fungiActions';
 import SpeciesCard from "../../components/SpeciesCard";
 import SpeciesInfo from "../../components/SpeciesInfo";
+import SpeciesMap from "../../components/SpeciesMap";
 import SpecieNames from "../../components/SpecieNames";
 import SpecieTaxon from "../../components/SpecieTaxon";
 import MycoCharacteristics from "../../components/MycoCharacteristics";
 import ObservationPhotos from "../../components/ObservationPhotos";
-import {
-  Dimmer,
-  Grid,
-  Loader,
-  } from 'semantic-ui-react';
+import { Dimmer, Grid, Loader } from 'semantic-ui-react';
 
 class Fungi extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {order: ''}
-  }
-
-  //componentWillMount() {}
-
+  
   componentDidMount() {
     this.props.actions.fetchSpecie(this.props.match.params.fungi);
   }
 
   componentWillReceiveProps(nextProps) {
-      if (nextProps.match.params.fungi !== this.props.match.params.fungi) {
-          this.props.actions.fetchSpecie(nextProps.match.params.fungi);
-      }
+    if (nextProps.match.params.fungi !== this.props.match.params.fungi) {
+      this.props.actions.fetchSpecie(nextProps.match.params.fungi);
+    }
   }
 
   render() {
@@ -61,10 +52,8 @@ class Fungi extends Component {
               <Grid.Column  computer={12}>
                 <SpeciesInfo
                     description={specieObject.specie.description}
-                    wikiUrl={fungiObject.fungi.wikipedia_url}
-                    ancestory={fungiObject.fungi.ancestory}
-                    synonymousTaxonIds={fungiObject.fungi.current_synonymous_taxon_ids}
                   />
+                  <SpeciesMap mapKey={specieObject.specie.speciesMapKey} />
               </Grid.Column>
               <Grid.Column computer={4}>
                 <MycoCharacteristics 

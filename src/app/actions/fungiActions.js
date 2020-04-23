@@ -171,14 +171,22 @@ export function fetchSpeciesDetails(name, ancestorIds) {
         }
       }),
       iNat.get('taxa', {
-          params: {
-            id: ancestorIds,
-            all_names: true,
-            locale: 'en',
-            rank: ['phylum', 'subphylum', 'superclass', 'class', 'subclass', 'superorder', 'order', 'suborder', 'family', 'genus', 'genushybrid', 'species', 'hybrid', 'subspecies']
-          }
-        }),
-    ]).then(axios.spread((descriptionResults, revisionResults, shortDescriptionResults, taxaResults) => {
+        params: {
+          id: ancestorIds,
+          all_names: true,
+          locale: 'en',
+          rank: ['phylum', 'subphylum', 'superclass', 'class', 'subclass', 'superorder', 'order', 'suborder', 'family', 'genus', 'genushybrid', 'species', 'hybrid', 'subspecies']
+        }
+      }),
+      axios.get('https://api.gbif.org/v1/species/match', {
+        params: {
+          name: name,
+          kingdom: 'Fungi',
+          rank: 'species',
+          verbose: true
+        }
+      })
+    ]).then(axios.spread((descriptionResults, revisionResults, shortDescriptionResults, taxaResults, gbifResults) => {
       // Find current mushroom Wiki ID
       const wikiId = parseInt(_.toPairs(descriptionResults.data.query.pages)[0][0]);
 
@@ -199,10 +207,43 @@ export function fetchSpeciesDetails(name, ancestorIds) {
         taxonomyData: taxaResults.data.results
       }
 
-      dispatch(specieSuccess(_.merge(mycologicalData, mushroomDescription, mushroomDescriptionShort, taxonomyData)));
-      
+      const gbifMapData = {
+        speciesMapKey: gbifResults.data.speciesKey
+      }
+
+      dispatch(specieSuccess(_.merge(mycologicalData, mushroomDescription, mushroomDescriptionShort, taxonomyData, gbifMapData)));
+      //dispatch(fetchSpeciesMap(hbifResults.data.speciesKey));
     })).catch(error =>
       dispatch(specieFailure(error))
     );
   }
 }
+
+/* export function fetchSpeciesMap(speciesKey) {
+  return async function (dispatch) {
+    dispatch(specieRequest());
+    return await axios.all([
+      axios.get('https://api.gbif.org/v2/map/occurrence/density/0/0/0@1x.png', {
+        params: {
+          taxonKey: speciesKey,
+          srs: 'EPSG:3857',
+          bin: 'hex',
+          hexPerTile: '120',
+          style: 'green.poly'
+        }
+      }),
+      axios.get('https://api.gbif.org/v2/map/occurrence/density/capabilities.json', {
+        params: {
+          taxonKey: speciesKey,
+          srs: 'EPSG:3857',
+          bin: 'hex',
+          hexPerTile: '120',
+          style: 'green.poly'
+        }
+      })
+    ]).then(axios.spread((mapResults, mapCapabilityResults) => {
+      console.log(mapResults);
+      console.log(mapCapabilityResults);
+    }))
+  }
+}; */

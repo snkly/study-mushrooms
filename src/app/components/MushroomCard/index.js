@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import "./styles.scss";
-import {
-  Card
-  } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 
 const MushroomCard = ({mushroom}) => {
   return (

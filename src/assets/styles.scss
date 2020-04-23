@@ -4,6 +4,11 @@
   display: block;
   height: 100vh;
   margin: 0 auto;
-  width: 1400px!important;
-  padding: 24px;
+  width: 1400px !important;
+  padding: 12px 6px !important;
+
+  @media (min-width: 767px) {
+    margin: 12px !important;
+    padding: 24px !important;
+  }
 }

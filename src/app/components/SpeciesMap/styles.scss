@@ -1,0 +1,22 @@
+.speciesMap {
+  padding-bottom: 0px;
+
+  .ui.grid {
+    .column img {
+      background-size: cover;
+    }
+
+    // osm-bright, gbif-geyser, gbif-light, gbif-middle
+    .column:nth-child(1) img {
+      background-image: url(https://tile.gbif.org/4326/omt/0/0/0@1x.png?style=gbif-middle)
+    }
+
+    .column:nth-child(2) img {
+      background-image: url(https://tile.gbif.org/4326/omt/0/1/0@1x.png?style=gbif-middle)
+    }
+  }
+
+  .column {
+    padding: 0px !important;
+  }
+}

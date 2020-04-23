@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import _ from 'lodash';
 import { iNat } from "../../../utils/config";
 import "./styles.scss";
-import {
-  Search
-  } from 'semantic-ui-react'
+import { Search } from 'semantic-ui-react'
 
 const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("");

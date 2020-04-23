@@ -2,13 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import "./styles.scss";
-import {
-  Header,
-  List,
-  Segment
-  } from 'semantic-ui-react'
+import { Header, List, Segment } from 'semantic-ui-react'
 
-const SpecieTaxon = ({taxonomyData}) => {
+const SpecieTaxon = ({ taxonomyData }) => {
   let margin = 0;
   // Taxon rank, Taxon name, Taxon common name
   const taxonomyTree = taxonomyData ? ( 

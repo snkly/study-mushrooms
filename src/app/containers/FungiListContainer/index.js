@@ -6,12 +6,7 @@ import {withRouter} from "react-router-dom";
 import * as actions from '../../actions/fungiActions';
 import _ from 'lodash';
 import MushroomCard from "../../components/MushroomCard";
-import {
-  Card,
-  Dimmer,
-  Loader,
-  Segment
-  } from 'semantic-ui-react'
+import { Card, Dimmer, Loader, Segment } from 'semantic-ui-react'
 
 class FungiList extends Component {
 

@@ -55,7 +55,8 @@ const INITIAL_STATE = {
             sporePrintDeposit2: null,
             howEdible: null,
             howEdible2: null,
-            taxonomyData: []
+            taxonomyData: [],
+            speciesMapKey: 0
         },
         error: null,
         loading: false
@@ -187,7 +188,8 @@ export default function (state = INITIAL_STATE, action) {
                         howEdible: null,
                         howEdible2: null,
                         observationPhotos: [],
-                        taxonomyData: []
+                        taxonomyData: [],
+                        speciesMapKey: 0
                     },
                     error: action.payload,
                     loading: false

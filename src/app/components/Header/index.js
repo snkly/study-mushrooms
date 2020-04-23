@@ -1,11 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from '../Search';
-import {
-  Grid,
-  Header,
-  Segment
-  } from 'semantic-ui-react'
+import { Grid, Header, Segment } from 'semantic-ui-react'
 
 const HeaderBar = () => {
   return (

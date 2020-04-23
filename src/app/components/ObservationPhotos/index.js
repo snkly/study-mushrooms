@@ -4,10 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import _ from 'lodash';
 import "./styles.scss";
-import {
-  Header,
-  Segment
-  } from 'semantic-ui-react'
+import { Header, Segment } from 'semantic-ui-react'
 
 const ObservationPhotos = ({photoSets, observationsCount}) => {
   let observationNum = _.toNumber(observationsCount).toLocaleString(); 
