@@ -8,7 +8,10 @@ import {
   FETCH_SPECIE_FAILURE,
   FUNGI_LIST_REQUEST,
   FUNGI_LIST_SUCCESS,
-  FUNGI_LIST_FAILURE
+  FUNGI_LIST_FAILURE,
+  FETCH_GBIF_REQUEST,
+  FETCH_GBIF_SUCCESS,
+  FETCH_GBIF_FAILURE,
   } from "../actions";
 
 const axios = require('axios');
@@ -74,6 +77,26 @@ export function fungiListFailure(error) {
   }
 }
 
+export function gbifRequest() {
+  return {
+    type: FETCH_GBIF_REQUEST
+  }
+}
+
+export function gbifSuccess(data) {
+  return {
+    type: FETCH_GBIF_SUCCESS,
+    payload: data
+  }
+}
+
+export function gbifFailure(error) {
+  return {
+    type: FETCH_GBIF_FAILURE,
+    payload: error
+  }
+}
+
 export function fetchFungiList() {
   return async function (dispatch) {
     dispatch(fungiListRequest());  
@@ -89,7 +112,7 @@ export function fetchFungiList() {
 export function fetchSpecie(id) {
   return async function (dispatch) {
     dispatch(fungiRequest());
-    return await axios.all([
+    return await Promise.all([
       iNat.get('taxa', {
         params: {
           id: id,
@@ -110,7 +133,7 @@ export function fetchSpecie(id) {
         },
         timeout: 1000 * 5,
       })
-    ]).then(axios.spread((taxaResults, observationResults) => {
+    ]).then(([taxaResults, observationResults]) => {
         const filteredObservationPhotos = { 
           observationPhotos: _.remove(observationResults.data.results, observation => {
             const result = observation.photos.map((photo) => {
@@ -124,14 +147,14 @@ export function fetchSpecie(id) {
 
         dispatch(fungiSuccess(speciesData));
         dispatch(fetchSpeciesDetails(taxaResults.data.results[0].name, taxaResults.data.results[0].ancestor_ids));
-    })).catch(error => dispatch(fungiFailure(error))); 
+    }).catch(error => dispatch(fungiFailure(error))); 
   }
 }
 
 export function fetchSpeciesDetails(name, ancestorIds) {
   return async function (dispatch) {
     dispatch(specieRequest());
-    return await axios.all([
+    return await Promise.all([
       axios.get('https://en.wikipedia.org/w/api.php', {
         //https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=Amanita%20muscaria
         params: {
@@ -186,7 +209,7 @@ export function fetchSpeciesDetails(name, ancestorIds) {
           verbose: true
         }
       })
-    ]).then(axios.spread((descriptionResults, revisionResults, shortDescriptionResults, taxaResults, gbifResults) => {
+    ]).then(([descriptionResults, revisionResults, shortDescriptionResults, taxaResults, gbifResults]) => {
       // Find current mushroom Wiki ID
       const wikiId = parseInt(_.toPairs(descriptionResults.data.query.pages)[0][0]);
 
@@ -212,38 +235,54 @@ export function fetchSpeciesDetails(name, ancestorIds) {
       }
 
       dispatch(specieSuccess(_.merge(mycologicalData, mushroomDescription, mushroomDescriptionShort, taxonomyData, gbifMapData)));
-      //dispatch(fetchSpeciesMap(hbifResults.data.speciesKey));
-    })).catch(error =>
+      dispatch(fetchSpeciesGBIF(gbifResults.data.speciesKey));
+    }).catch(error =>
       dispatch(specieFailure(error))
     );
   }
 }
 
-/* export function fetchSpeciesMap(speciesKey) {
+export function fetchSpeciesGBIF(speciesKey) {
   return async function (dispatch) {
-    dispatch(specieRequest());
-    return await axios.all([
-      axios.get('https://api.gbif.org/v2/map/occurrence/density/0/0/0@1x.png', {
+    dispatch(gbifRequest());
+    return await Promise.all([
+      axios.get(`https://api.gbif.org/v1/species/${speciesKey}`),
+      axios.get('https://api.gbif.org/v2/map/occurrence/density/capabilities.json', {
+        // Match params with params set in SpeciesMap component. TODO: add to config
         params: {
           taxonKey: speciesKey,
-          srs: 'EPSG:3857',
+          srs: 'EPSG:4326',
           bin: 'hex',
-          hexPerTile: '120',
-          style: 'green.poly'
+          hexPerTile: 75,
+          style: 'classic-noborder.poly'
         }
       }),
-      axios.get('https://api.gbif.org/v2/map/occurrence/density/capabilities.json', {
-        params: {
-          taxonKey: speciesKey,
-          srs: 'EPSG:3857',
-          bin: 'hex',
-          hexPerTile: '120',
-          style: 'green.poly'
-        }
-      })
-    ]).then(axios.spread((mapResults, mapCapabilityResults) => {
-      console.log(mapResults);
-      console.log(mapCapabilityResults);
-    }))
+      axios.get('https://secret-bayou-43857.herokuapp.com/https://www.gbif.org/api/occurrence/breakdown', {
+          params: {
+            taxonKey: speciesKey,
+            dimension: 'month',
+            fillEnums: true,
+            limit: 12,
+            locale: 'en',
+            offset: 0
+          }
+        }),
+        axios.get(`https://api.gbif.org/v1/species/${speciesKey}/media`),
+        axios.get(`https://api.gbif.org/v1/species/${speciesKey}/synonyms`),
+        axios.get(`https://api.gbif.org/v1/species/${speciesKey}/combinations`),
+    ]).then(([speciesResults, mapCapabilityResults, monthlyObservationResults, mediaResults, synonymResults, basionymResults]) => {
+      dispatch(gbifSuccess(
+        _.merge({
+          species: speciesResults.data,
+          mapCapabilities: mapCapabilityResults.data,
+          monthlyOccurrences: monthlyObservationResults.data,
+          media: mediaResults.data.results,
+          synonyms: synonymResults.data.results,
+          basionym: basionymResults.data
+        })
+      ));
+    }).catch(error =>
+      dispatch(gbifFailure(error))
+    );
   }
-}; */
+};

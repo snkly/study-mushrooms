@@ -11,7 +11,7 @@ const SearchBar = () => {
 
   useEffect(() => {
     if (searchValue.length >= 3  ) {
-      iNat.get('https://api.inaturalist.org/v1/taxa/autocomplete', {
+      iNat.get('taxa/autocomplete', {
         params: {
           q: searchValue,
           all_names: false,

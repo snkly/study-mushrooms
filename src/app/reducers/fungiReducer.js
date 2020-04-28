@@ -7,7 +7,10 @@ import {
     FETCH_SPECIE_FAILURE,
     FUNGI_LIST_REQUEST,
     FUNGI_LIST_SUCCESS,
-    FUNGI_LIST_FAILURE
+    FUNGI_LIST_FAILURE,
+    FETCH_GBIF_REQUEST,
+    FETCH_GBIF_SUCCESS,
+    FETCH_GBIF_FAILURE
 } from "../actions";
 
 const INITIAL_STATE = {
@@ -46,7 +49,7 @@ const INITIAL_STATE = {
             ecologicalType2: null,
             capShape: null,
             capShape2: null,
-            hymeniumType:null,
+            hymeniumType: null,
             whichGills: null,
             whichGills2: null,
             stipeCharacter: null,
@@ -57,6 +60,18 @@ const INITIAL_STATE = {
             howEdible2: null,
             taxonomyData: [],
             speciesMapKey: 0
+        },
+        error: null,
+        loading: false
+    },
+    gbifObject: {
+        data: {
+            species: {},
+            mapCapabilities: {},
+            media: [],
+            monthlyOccurrences: {},
+            synonyms: [],
+            basionym: []
         },
         error: null,
         loading: false
@@ -95,7 +110,7 @@ export default function (state = INITIAL_STATE, action) {
         case FETCH_FUNGI_REQUEST:
             return {
                 ...state,
-               fungiObject: {
+                fungiObject: {
                     fungi: {
                         name: "",
                         names: [{}],
@@ -149,7 +164,7 @@ export default function (state = INITIAL_STATE, action) {
             return {
                 ...state,
                 specieObject: {
-                    specie: {...state.specieObject.specie},
+                    specie: { ...state.specieObject.specie },
                     error: null,
                     loading: true
                 }
@@ -178,7 +193,7 @@ export default function (state = INITIAL_STATE, action) {
                         ecologicalType2: null,
                         capShape: null,
                         capShape2: null,
-                        hymeniumType:null,
+                        hymeniumType: null,
                         whichGills: null,
                         whichGills2: null,
                         stipeCharacter: null,
@@ -190,6 +205,40 @@ export default function (state = INITIAL_STATE, action) {
                         observationPhotos: [],
                         taxonomyData: [],
                         speciesMapKey: 0
+                    },
+                    error: action.payload,
+                    loading: false
+                }
+            };
+        case FETCH_GBIF_REQUEST:
+            return {
+                ...state,
+                gbifObject: {
+                    data: { ...state.gbifObject.data },
+                    error: null,
+                    loading: true
+                }
+            };
+        case FETCH_GBIF_SUCCESS:
+            return {
+                ...state,
+                gbifObject: {
+                    data: action.payload,
+                    error: null,
+                    loading: false
+                }
+            };
+        case FETCH_GBIF_FAILURE:
+            return {
+                ...state,
+                gbifObject: {
+                    data: {
+                        species: {},
+                        mapCapabilities: {},
+                        media: [],
+                        monthlyOccurrences: {},
+                        synonyms: [],
+                        basionym: []
                     },
                     error: action.payload,
                     loading: false

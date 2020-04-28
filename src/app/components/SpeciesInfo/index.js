@@ -20,7 +20,7 @@ const SpeciesInfo = ({ description }) => {
     //return { header: header, content: content[1] };
     return { menuItem: header, render: () => <Tab.Pane dangerouslySetInnerHTML={{ __html: content[1] ? content[1] : content[0]}}/> } 
   });
-  
+
   return (
     <Fragment>
       <Header as='h3' attached='top' content='Species Information' />
