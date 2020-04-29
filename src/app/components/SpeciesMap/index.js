@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import "./styles.scss";
-import { Dimmer, Grid, Image, Loader, Segment } from 'semantic-ui-react';
+import { Dimmer, Grid, Header, Image, Loader, Segment } from 'semantic-ui-react';
 
 const SpeciesMap = ({ mapKey, loading, mapCapabilities }) => {
   const gbifMap = (z, x, y) => (
@@ -13,19 +14,31 @@ const SpeciesMap = ({ mapKey, loading, mapCapabilities }) => {
   )
  
   return (
-    <Segment basic className="speciesMap">
+    <Segment.Group className="speciesMap">
       {!loading ? (
-      <Grid columns={2}>
-        <Grid.Column>
-          {gbifMap(0, 0, 0)}
-        </Grid.Column>
-        <Grid.Column>
-          {gbifMap(0, 1, 0)}
-        </Grid.Column>
-      </Grid>
-      ) : (<Dimmer active inverted className="mapLoader"><Loader size="small" content="Loading Map"/></Dimmer>)
+        <>
+          <Segment attached>
+            <Grid className="mapGrid" columns={2} >
+              <Grid.Column>
+                {gbifMap(0, 0, 0)}
+              </Grid.Column>
+              <Grid.Column>
+                {gbifMap(0, 1, 0)}
+              </Grid.Column>
+            </Grid>
+          </Segment>
+          <Segment attached='bottom'>
+            <Header 
+              as="h5"
+              content={`Total Occurrences: ${_.toNumber(mapCapabilities.total).toLocaleString()} `} 
+              subheader={`Records from ${mapCapabilities.minYear}-${mapCapabilities.maxYear}`}
+              textAlign="right"
+            />
+          </Segment>
+        </>
+      ) : (<Dimmer active inverted className="mapLoader"><Loader inline size="small" content="Loading Map"/></Dimmer>)
       }
-    </Segment>
+    </Segment.Group>
   );
 }
 
