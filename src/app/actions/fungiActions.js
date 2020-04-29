@@ -108,7 +108,6 @@ export function fetchFungiList() {
   }
 }
 
-// Get species info from iNat using 
 export function fetchSpecie(id) {
   return async function (dispatch) {
     dispatch(fungiRequest());
@@ -212,29 +211,12 @@ export function fetchSpeciesDetails(name, ancestorIds) {
     ]).then(([descriptionResults, revisionResults, shortDescriptionResults, taxaResults, gbifResults]) => {
       // Find current mushroom Wiki ID
       const wikiId = parseInt(_.toPairs(descriptionResults.data.query.pages)[0][0]);
-
-      // Get specie description from Wikipedia
-      const mushroomDescription = {
-        description: descriptionResults.data.query.pages[wikiId].extract
-      }
-      // Get specie mycological characteristics from Wikipedia revision data
-      const mycologicalData = formatWikiRevision(revisionResults.data.query.pages[wikiId].revisions[0]["*"]);
-
-      // Get specie description from Wikipedia 
-      const mushroomDescriptionShort = {
-        descriptionShort: shortDescriptionResults.data.query.pages[wikiId].description
-      }
-
-      // Get species taxonomy info from iNat 
-      const taxonomyData = {
+      
+      dispatch(specieSuccess(_.merge({
+        description: descriptionResults.data.query.pages[wikiId].extract,
+        descriptionShort: shortDescriptionResults.data.query.pages[wikiId].description,
         taxonomyData: taxaResults.data.results
-      }
-
-      const gbifMapData = {
-        speciesMapKey: gbifResults.data.speciesKey
-      }
-
-      dispatch(specieSuccess(_.merge(mycologicalData, mushroomDescription, mushroomDescriptionShort, taxonomyData, gbifMapData)));
+      }, formatWikiRevision(revisionResults.data.query.pages[wikiId].revisions[0]["*"]))));
       dispatch(fetchSpeciesGBIF(gbifResults.data.speciesKey));
     }).catch(error =>
       dispatch(specieFailure(error))

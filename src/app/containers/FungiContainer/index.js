@@ -11,7 +11,8 @@ import SpecieNames from "../../components/SpecieNames";
 import SpecieTaxon from "../../components/SpecieTaxon";
 import MycoCharacteristics from "../../components/MycoCharacteristics";
 import ObservationPhotos from "../../components/ObservationPhotos";
-import { Dimmer, Grid, Loader } from 'semantic-ui-react';
+import "./styles.scss";
+import { Dimmer, Grid, Loader, Segment } from 'semantic-ui-react';
 
 class Fungi extends Component {
   
@@ -19,17 +20,17 @@ class Fungi extends Component {
     this.props.actions.fetchSpecie(this.props.match.params.fungi);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     if (nextProps.match.params.fungi !== this.props.match.params.fungi) {
       this.props.actions.fetchSpecie(nextProps.match.params.fungi);
     }
   }
 
   render() {
-    const { fungiObject, specieObject } = this.props;
-   
+    const { fungiObject, specieObject, gbifObject } = this.props;
+    
     return (
-      <Fragment>
+      <Segment basic className='speciesContainer'>
         {!fungiObject.loading && !specieObject.loading ? (
           <Grid stackable>
             <Grid.Row computer={2}>
@@ -51,9 +52,13 @@ class Fungi extends Component {
             <Grid.Row computer={2}>
               <Grid.Column  computer={12}>
                 <SpeciesInfo
-                    description={specieObject.specie.description}
-                  />
-                  <SpeciesMap mapKey={specieObject.specie.speciesMapKey} />
+                  description={specieObject.specie.description}
+                />
+                <SpeciesMap 
+                  mapKey={gbifObject.data.species.key} 
+                  loading={gbifObject.loading}
+                  mapCapabilities={gbifObject.data.mapCapabilities}
+                />  
               </Grid.Column>
               <Grid.Column computer={4}>
                 <MycoCharacteristics 
@@ -77,20 +82,22 @@ class Fungi extends Component {
             </Grid.Row>
           </Grid>
         ) : (<Dimmer active inverted><Loader size="large" content="Loading" /></Dimmer>)}
-      </Fragment>
+      </Segment>
     );
   }
 }
 
 Fungi.propTypes = {
   fungiObject: PropTypes.object.isRequired,
-  specieObject: PropTypes.object.isRequired
+  specieObject: PropTypes.object.isRequired,
+  gbifObject: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     fungiObject: state.fungiReducer.fungiObject,
-    specieObject: state.fungiReducer.specieObject
+    specieObject: state.fungiReducer.specieObject,
+    gbifObject: state.fungiReducer.gbifObject
   };
 }
 
