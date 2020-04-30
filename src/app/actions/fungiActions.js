@@ -210,13 +210,19 @@ export function fetchSpeciesDetails(name, ancestorIds) {
       })
     ]).then(([descriptionResults, revisionResults, shortDescriptionResults, taxaResults, gbifResults]) => {
       // Find current mushroom Wiki ID
-      const wikiId = parseInt(_.toPairs(descriptionResults.data.query.pages)[0][0]);
+      const wikiId = parseInt(_.toPairs(descriptionResults.data.query.pages)[0][0])
       
-      dispatch(specieSuccess(_.merge({
-        description: descriptionResults.data.query.pages[wikiId].extract,
-        descriptionShort: shortDescriptionResults.data.query.pages[wikiId].description,
-        taxonomyData: taxaResults.data.results
-      }, formatWikiRevision(revisionResults.data.query.pages[wikiId].revisions[0]["*"]))));
+      // Prevent null Wikipedia results
+      // TODO: Find correct associated article title or key and retry call
+      const verifiedData = wikiId !== -1 
+        ? _.merge({
+            description: descriptionResults.data.query.pages[wikiId].extract,
+            descriptionShort: shortDescriptionResults.data.query.pages[wikiId].description,
+            taxonomyData: taxaResults.data.results
+          }, formatWikiRevision(revisionResults.data.query.pages[wikiId].revisions[0]["*"]))
+        : {taxonomyData: taxaResults.data.results}; 
+     
+      dispatch(specieSuccess(verifiedData));
       dispatch(fetchSpeciesGBIF(gbifResults.data.speciesKey));
     }).catch(error =>
       dispatch(specieFailure(error))

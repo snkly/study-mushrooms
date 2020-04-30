@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import "./styles.scss";
-import { Dimmer, Grid, Header, Image, Loader, Segment } from 'semantic-ui-react';
+import {Dimmer, Grid, Header, Image, Loader, Segment} from 'semantic-ui-react';
 
-const SpeciesMap = ({ mapKey, loading, mapCapabilities }) => {
+const SpeciesMap = ({mapKey, loading, mapCapabilities}) => {
   const gbifMap = (z, x, y) => (
     <Image 
       fluid
@@ -43,7 +43,9 @@ const SpeciesMap = ({ mapKey, loading, mapCapabilities }) => {
 }
 
 SpeciesMap.propTypes = {
-  mapKey: PropTypes.number.isRequired
+  mapKey: PropTypes.number.isRequired,
+  loading: PropTypes.bool.isRequired,
+  mapCapabilities: PropTypes.object.isRequired,
 };
 
 export default SpeciesMap;

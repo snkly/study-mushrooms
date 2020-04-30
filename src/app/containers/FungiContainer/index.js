@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -12,10 +12,10 @@ import SpecieTaxon from "../../components/SpecieTaxon";
 import MycoCharacteristics from "../../components/MycoCharacteristics";
 import ObservationPhotos from "../../components/ObservationPhotos";
 import "./styles.scss";
-import { Dimmer, Grid, Loader, Segment } from 'semantic-ui-react';
+import {Dimmer, Grid, Loader, Segment} from 'semantic-ui-react';
 
 class Fungi extends Component {
-  
+
   componentDidMount() {
     this.props.actions.fetchSpecie(this.props.match.params.fungi);
   }
@@ -27,7 +27,7 @@ class Fungi extends Component {
   }
 
   render() {
-    const { fungiObject, specieObject, gbifObject } = this.props;
+    const {fungiObject, specieObject, gbifObject} = this.props;
     
     return (
       <Segment basic className='speciesContainer'>
@@ -40,6 +40,8 @@ class Fungi extends Component {
                   commonName={fungiObject.fungi.preferred_common_name}
                   image={fungiObject.fungi.default_photo.square_url.replace('square', 'large')}
                   description={specieObject.specie.descriptionShort}
+                  loadingGBIF={gbifObject.loading}
+                  occurrenceTotal={gbifObject.data.mapCapabilities.total}
                 />
               </Grid.Column>
               <Grid.Column computer={10}>

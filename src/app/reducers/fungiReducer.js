@@ -184,7 +184,7 @@ export default function (state = INITIAL_STATE, action) {
                     specie: {
                         fungi: null,
                         fungiName: null,
-                        description: null,
+                        description: "",
                         descriptionShort: "Species of fungus",
                         image: null,
                         authority: null,
