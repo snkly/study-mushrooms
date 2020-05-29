@@ -6,7 +6,8 @@ import {withRouter} from "react-router-dom";
 import * as actions from '../../actions/fungiActions';
 import _ from 'lodash';
 import MushroomCard from "../../components/MushroomCard";
-import { Card, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import "./styles.scss";
+import { Card, Dimmer, Loader, Segment } from 'semantic-ui-react';
 
 class FungiList extends Component {
 
@@ -21,13 +22,13 @@ class FungiList extends Component {
         <Segment>
           <Card.Group 
             itemsPerRow={5}
-            style={{ margin: '.25em auto'}}
+            className="fungiList"
             fluid
             stackable
           >
           {!fungiList.loading 
             ? _.shuffle(fungiList.mushrooms).map(mushroom => <MushroomCard key={mushroom.id} mushroom={mushroom}/>)
-            : (<Dimmer active inverted><Loader size="large" content="Loading"/></Dimmer>)
+            : (<Segment basic><Dimmer active inverted className="loading"><Loader inline size="large" content="Loading"/></Dimmer></Segment>)
           } 
           </Card.Group>
         </Segment>
