@@ -28,7 +28,7 @@ class Fungi extends Component {
 
   render() {
     const {fungiObject, specieObject, gbifObject} = this.props;
-    
+    console.log(gbifObject.data);
     return (
       <Segment basic className='speciesContainer'>
         {!fungiObject.loading && !specieObject.loading ? (

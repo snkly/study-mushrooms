@@ -5,20 +5,20 @@ import "./styles.scss";
 import { Container, Header, Segment, Tab } from 'semantic-ui-react'
 
 const SpeciesInfo = ({ description }) => {
-  
+  const wordCount = _.words(description, /\b(\w+(?![^<>]*>))\b/g).length; // https://regexr.com/52j7r Grab all non-html from string
+  const unwantedSectionHeaders = ["See also", "Footnotes", "Resources", "References", "External links", "Gallery", "Further reading", "Notes"];
+
   // Rebuild Tabs vs. Full text / Desktop, Mobile functionality
-  // https://regexr.com/52j7r -> grab all non-html from string
-  const wordCount = _.words(description, /\b(\w+(?![^<>]*>))\b/g).length;
-    
-  const getSectionPanes =  _.split(description, '<h2>').flatMap((descriptionText, i) => {
+  const getSectionPanes = _.split(description, '<h2>').flatMap((descriptionText, i) => {
+    const sectionContent = descriptionText.split('</h2>');
+
     // Get header from revision HTML string with regex, Content before '</span></h2>'
     let findHeaderText = descriptionText.match(/(?<=(">))(\w|\d|\n|[().,\-:;@#$%^&*[\]"'+–//®°⁰!?{}|`~]| )+?(?=(<\/span><\/h2>))/g);
     const header = !_.isNull(findHeaderText) ? findHeaderText.pop() : "Info";
-    const content = descriptionText.split('</h2>');
 
-    if (header === "See also" || header === "Footnotes" || header === "Resources" || header === "References" || header === "External links" || header === "Gallery" || header === "Further reading" || header === "Notes" ) return []; 
-    //return { header: header, content: content[1] };
-    return { menuItem: header, render: () => <Tab.Pane dangerouslySetInnerHTML={{ __html: content[1] ? content[1] : content[0]}}/> } 
+    // Omit sections by unwanted section headers
+    if (unwantedSectionHeaders.some((title) => header === title ? true : false)) return [];
+    return { menuItem: header, render: () => <Tab.Pane dangerouslySetInnerHTML={{ __html: sectionContent[1] ? sectionContent[1] : sectionContent[0] }} /> }
   });
 
   return (
@@ -26,9 +26,13 @@ const SpeciesInfo = ({ description }) => {
       <Header as='h3' attached='top' content='Species Information' />
       <Segment attached>
         {
-          wordCount > 700 
-          ? <Tab menu={{ attached: true, fluid: true, vertical: true, tabular: true}} panes={getSectionPanes} className="specieInfo"/>
-          : <Container dangerouslySetInnerHTML={{ __html: description}}/>
+          wordCount > 700
+          ? <Tab 
+              menu={{ attached: true, fluid: true, vertical: true, tabular: true }} 
+              panes={getSectionPanes} 
+              className="specieInfo"
+            />
+          : <Container dangerouslySetInnerHTML={{ __html: description }} />
         }
       </Segment>
     </Fragment>
