@@ -23,7 +23,7 @@ class FungiList extends Component {
           <Card.Group 
             itemsPerRow={5}
             className="fungiList"
-            fluid
+            fluid="true"
             stackable
           >
           {!fungiList.loading 

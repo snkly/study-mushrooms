@@ -21,7 +21,7 @@ const SpecieNames = ({names}) => {
         <List items={getNameByType(true, "sci")} />
         <h5>Common Names</h5>
         <List items={getNameByType(true, "en")} />
-        { oldTaxonNames.length 
+        { oldTaxonNames.length > 0
           ? (<> 
             <h5>Taxon names (old)</h5>
             <List items={oldTaxonNames} /> 

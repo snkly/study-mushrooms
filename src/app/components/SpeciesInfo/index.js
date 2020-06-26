@@ -24,13 +24,13 @@ const SpeciesInfo = ({ description }) => {
   return (
     <Fragment>
       <Header as='h3' attached='top' content='Species Information' />
-      <Segment attached>
+      <Segment attached className="speciesInfo__container">
         {
           wordCount > 700
           ? <Tab 
               menu={{ attached: true, fluid: true, vertical: true, tabular: true }} 
               panes={getSectionPanes} 
-              className="specieInfo"
+              className="specieInfo__tab"
             />
           : <Container dangerouslySetInnerHTML={{ __html: description }} />
         }
