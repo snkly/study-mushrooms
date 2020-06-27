@@ -65,7 +65,9 @@ const INITIAL_STATE = {
     },
     gbifObject: {
         data: {
-            species: {},
+            species: {
+                key: 0
+            },
             mapCapabilities: {},
             media: [],
             monthlyOccurrences: {},

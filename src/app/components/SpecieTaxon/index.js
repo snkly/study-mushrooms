@@ -11,17 +11,18 @@ const SpecieTaxon = ({ taxonomyData }) => {
   // Taxon rank, Taxon name, Taxon common name
   const taxonomyTree = taxonomyData ? ( 
     taxonomyData.map((taxon) => {
-      const { rank, name, names, id } = taxon; 
+      const { rank, name, names, id } = taxon;
       // Find "true" common name
       const getCommonTaxonName = names && rank !== "phylum" && rank !== "species" ? (
         _.find(names, name => name.is_valid === true &&  name.locale === "en" && !_.includes(name.name, name))
       ) : null;
-
-      return <>
-        <List.Item 
-          style={{marginLeft: isTabletOrMobile ? null : margin += 8}} 
-          key={id}><strong>{rank}</strong> {name} <br/>{getCommonTaxonName ? `(${getCommonTaxonName.name})` : ''}
-        </List.Item></>
+      
+      return (
+        <List.Item key={id} style={{marginLeft: isTabletOrMobile ? null : margin += 8}}>
+          <strong>{rank}</strong> {name} <br/>
+          {getCommonTaxonName ? `(${getCommonTaxonName.name})` : ''}
+        </List.Item>
+      )
     })
   ) : null;
   

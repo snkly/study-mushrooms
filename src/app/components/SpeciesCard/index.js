@@ -6,7 +6,6 @@ import { Card } from 'semantic-ui-react'
 
 const SpeciesCard = ({name, commonName, image, description, occurrenceTotal, loadingGBIF}) => {
   // Placeholder "popularity score" for now
-  console.log(loadingGBIF);
   const speciesPopularity = loadingGBIF ? "" :
       _.inRange(occurrenceTotal, 1000) ? "Legendary"
         : _.inRange(occurrenceTotal, 1000, 2500) ? "Rare" 

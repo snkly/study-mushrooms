@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import "./styles.scss";
+import { useMediaQuery } from 'react-responsive'
 import { Container, Header, Segment, Tab } from 'semantic-ui-react'
 
 const SpeciesInfo = ({ description }) => {
@@ -26,7 +27,7 @@ const SpeciesInfo = ({ description }) => {
       <Header as='h3' attached='top' content='Species Information' />
       <Segment attached className="speciesInfo__container">
         {
-          wordCount > 700
+          wordCount > 700 & !useMediaQuery({ query: '(max-width: 1224px)' }) 
           ? <Tab 
               menu={{ attached: true, fluid: true, vertical: true, tabular: true }} 
               panes={getSectionPanes} 

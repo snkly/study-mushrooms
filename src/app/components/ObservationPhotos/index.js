@@ -8,9 +8,8 @@ import {Header, Segment} from 'semantic-ui-react'
 
 const ObservationPhotos = ({photoSets, observationsCount}) => {
   let observationNum = _.toNumber(observationsCount).toLocaleString();
-
   const observationPhotos = photoSets ? (
-    photoSets.map((photoSet, i) => {
+    photoSets.map((photoSet) => {
       return photoSet.photos.map((photoObj) => photoObj)
     }) 
   ) : null;
@@ -23,7 +22,14 @@ const ObservationPhotos = ({photoSets, observationsCount}) => {
         autoPlay>
         {_(observationPhotos)
             .flatten()
-            .map((image) => <img src={image.url.replace("square", "large")} attr={image.attribution} key={image.id}/>)
+            .map((image, i) => (
+              <img 
+                src={image.url.replace("square", "large")}
+                attr={image.attribution} 
+                key={image.id} 
+                alt={photoSets[0].species_guess + " #" + i}
+              />)
+            )
             .value()
         }
       </Carousel>

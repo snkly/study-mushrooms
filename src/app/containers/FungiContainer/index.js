@@ -11,8 +11,8 @@ import SpecieNames from "../../components/SpecieNames";
 import SpecieTaxon from "../../components/SpecieTaxon";
 import MycoCharacteristics from "../../components/MycoCharacteristics";
 import ObservationPhotos from "../../components/ObservationPhotos";
-import "./styles.scss";
 import {Dimmer, Grid, Loader, Segment} from 'semantic-ui-react';
+import "./styles.scss";
 
 class Fungi extends Component {
 
@@ -28,7 +28,7 @@ class Fungi extends Component {
 
   render() {
     const {fungiObject, specieObject, gbifObject} = this.props;
-    console.log(gbifObject.data);
+
     return (
       <Segment basic className='speciesContainer'>
         {!fungiObject.loading && !specieObject.loading ? (
@@ -51,8 +51,8 @@ class Fungi extends Component {
                 />
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row computer={2}>
-              <Grid.Column  computer={12}>
+            <Grid.Row computer={2} reversed='mobile'>
+              <Grid.Column computer={12}>
                 <SpeciesInfo
                   description={specieObject.specie.description}
                 />
